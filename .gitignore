@@ -1,0 +1,14 @@
+# Python / FastAPI
+__pycache__/
+*.py[cod]
+.venv/
+env/
+venv/
+.env
+
+# DBeaver / Database local artifacts
+.dbeaver/
+
+# OS Files
+.DS_Store
+Thumbs.db
