@@ -1,5 +1,4 @@
 # app/config.py
-import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
@@ -8,6 +7,10 @@ class Settings(BaseSettings):
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_PORT: str = "5432"
     POSTGRES_DB: str = "vitc_hostel_db"
+
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
 
     @property
     def ASYNC_DATABASE_URL(self) -> str:
