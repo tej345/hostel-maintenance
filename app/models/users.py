@@ -1,7 +1,7 @@
 # app/models/users.py
 import enum
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 from sqlalchemy import String, Integer, DateTime, Enum as SQLEnum, ForeignKey, func, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
@@ -27,7 +27,7 @@ class User(Base):
     phone: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[UserRoleEnum] = mapped_column(
-        SQLEnum(UserRoleEnum, name="user_role", create_type=False),
+        SQLEnum(UserRoleEnum, name="user_role"),
         nullable=False,
         default=UserRoleEnum.STUDENT
     )
@@ -36,5 +36,4 @@ class User(Base):
     room_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("rooms.id", ondelete="SET NULL"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    # Relationships
     room: Mapped[Optional["Room"]] = relationship("Room", back_populates="users")
