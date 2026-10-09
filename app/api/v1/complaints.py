@@ -97,3 +97,22 @@ async def resolve_complaint(
     await db.commit()
     await db.refresh(repair_log)
     return repair_log
+
+@router.delete("/{complaint_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_complaint(
+    complaint_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    result = await db.execute(select(Complaint).where(Complaint.id == complaint_id))
+    complaint = result.scalars().first()
+    
+    if not complaint:
+        raise HTTPException(status_code=404, detail="Complaint not found")
+        
+    # Ensure the user owns the complaint (or is an Admin)
+    if complaint.student_id != current_user.id and current_user.role != UserRoleEnum.ADMIN:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this complaint")
+        
+    await db.delete(complaint)
+    await db.commit()
