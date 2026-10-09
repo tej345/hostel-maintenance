@@ -37,12 +37,12 @@ class Complaint(Base):
     room_id: Mapped[int] = mapped_column(Integer, ForeignKey("rooms.id", ondelete="CASCADE"), nullable=False)
 
     priority: Mapped[PriorityEnum] = mapped_column(
-        SQLEnum(PriorityEnum, name="priority_level", create_type=False),
+        SQLEnum(PriorityEnum, name="priority_level"),
         nullable=False,
         default=PriorityEnum.MEDIUM
     )
     status: Mapped[StatusEnum] = mapped_column(
-        SQLEnum(StatusEnum, name="complaint_status", create_type=False),
+        SQLEnum(StatusEnum, name="complaint_status"),
         nullable=False,
         default=StatusEnum.PENDING
     )
@@ -53,7 +53,6 @@ class Complaint(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     resolved_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    # Relationships
     category: Mapped["ComplaintCategory"] = relationship("ComplaintCategory")
     student: Mapped["User"] = relationship("User", foreign_keys=[student_id])
     assigned_technician: Mapped[Optional["User"]] = relationship("User", foreign_keys=[assigned_technician_id])
